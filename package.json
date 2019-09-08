@@ -1,0 +1,21 @@
+{
+  "name": "coffeeshopmc-bot",
+  "version": "1.0.0",
+  "description": "Bot that manages my minecraft server discord <3",
+  "main": "build/index.js",
+  "repository": "git@github.com:sarahkittyy/coffeeshopmc-bot.git",
+  "author": "Sarah Ohlin <sarahohlin1@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/node": "^12.7.4",
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0",
+    "tsc-watch": "^3.0.1",
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node .\"",
+    "start": "tsc && node ."
+  }
+}
