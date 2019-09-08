@@ -82,7 +82,7 @@ export class Bot
 			this.login();
 		});
 		
-		//! User join / leave messages
+		//! User join / leave events
 		this.client.on('guildMemberAdd', (member: Discord.GuildMember) => {
 			this.welcomeChannel.send(Message.MemberJoin(member));
 		});
