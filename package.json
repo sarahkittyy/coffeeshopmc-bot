@@ -16,6 +16,6 @@
   },
   "scripts": {
     "dev": "env NODE_ENV=development tsc-watch --onSuccess \"node .\"",
-    "start": "tsc && node ."
+    "start": "tsc-watch --onSuccess \"node .\""
   }
 }
