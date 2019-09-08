@@ -1,3 +1,4 @@
 {
-	"welcomeChannel": "welcome"
+	"welcomeChannel": "welcome",
+	"commandPrefix": "=>"
 }
