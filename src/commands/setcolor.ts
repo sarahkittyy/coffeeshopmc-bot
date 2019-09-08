@@ -5,9 +5,10 @@ import * as Discord from 'discord.js';
 
 export default async function setcolor(args: cmdArgs)
 {
-	if(args.args.length == 0)
+	if(args.args.length == 0 || args.args.length >= 3)
 	{
 		args.message.channel.send(Message.Error(`Invalid usage. See ${config.commandPrefix}help for help.`));
+		return;
 	}
 	
 	let hex: string = args.args[0];

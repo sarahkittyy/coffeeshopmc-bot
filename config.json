@@ -1,4 +1,5 @@
 {
 	"welcomeChannel": "welcome",
-	"commandPrefix": "=>"
+	"commandPrefix": "=>",
+	"deleteCommands": false
 }

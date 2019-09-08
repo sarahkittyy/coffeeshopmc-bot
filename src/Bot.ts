@@ -102,7 +102,7 @@ export class Bot
 				{
 					runCommand(args).catch(console.error)
 					.then(() => {
-						if(message.deletable)
+						if(message.deletable && config.deleteCommands)
 						{
 							message.delete();
 						}
@@ -113,7 +113,7 @@ export class Bot
 					message.channel.send(Message.UnknownCommand(args.command))
 					.catch(console.error)
 					.then(() => {
-						if(message.deletable)
+						if(message.deletable && config.deleteCommands)
 						{
 							message.delete();
 						}
