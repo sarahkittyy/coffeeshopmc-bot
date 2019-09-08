@@ -1,6 +1,10 @@
 import * as Discord from 'discord.js';
-import * as Message from './util/messages';
+import * as Message from './util/Messages';
 import config from './Settings';
+import isCommand from './util/isCommand';
+import { toArgs, cmdArgs } from './commands/cmdArgs';
+import fs from 'fs';
+import { table, commandExists, runCommand } from './commands/table';
 
 export class Bot
 {
@@ -88,6 +92,34 @@ export class Bot
 		});
 		this.client.on('guildMemberRemove', (member: Discord.GuildMember) => {
 			this.welcomeChannel.send(Message.MemberLeave(member));
+		});
+		
+		this.client.on('message', (message: Discord.Message) => {
+			if(isCommand(message))
+			{
+				let args: cmdArgs = toArgs(message, this);
+				if(commandExists(args.command))
+				{
+					runCommand(args).catch(console.error)
+					.then(() => {
+						if(message.deletable)
+						{
+							message.delete();
+						}
+					});
+				}
+				else
+				{
+					message.channel.send(Message.UnknownCommand(args.command))
+					.catch(console.error)
+					.then(() => {
+						if(message.deletable)
+						{
+							message.delete();
+						}
+					});
+				}
+			}
 		});
 	}
 	
