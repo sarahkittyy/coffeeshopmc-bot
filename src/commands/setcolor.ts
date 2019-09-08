@@ -42,7 +42,7 @@ export default async function setcolor(args: cmdArgs)
 	else
 	{
 		guild.createRole({
-			color: parseInt(hex),
+			color: parseInt(hex, 16),
 			hoist: false,
 			mentionable: false,
 			name: colorRoleName,
