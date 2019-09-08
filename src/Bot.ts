@@ -1,13 +1,23 @@
 import * as Discord from 'discord.js';
+import * as Message from './util/messages';
+import config from './Settings';
 
 export class Bot
 {
 	/// The bot's token
 	private token: string;
-	
 	/// The bot client.
 	private client: Discord.Client;
 	
+	//* Utility vars
+	/// Main guild the bot is working in.
+	private guild: Discord.Guild;
+	/// Channel to submit join / leave messages to.
+	private welcomeChannel: Discord.TextChannel;
+	
+	/**
+	 * @brief Bot initialization.
+	 */
 	public constructor()
 	{
 		if(process.env.NODE_ENV === 'development')
@@ -30,19 +40,54 @@ export class Bot
 	}
 	
 	/**
+	 * @brief Initialize the bot's settings.
+	 */
+	private initConfig()
+	{
+		//* Init main bot guild.
+		this.guild = this.client.guilds.first();
+		if(!this.guild)
+		{
+			throw Error('Could not find any guilds!');
+		}
+		
+		//* Init welcome channel
+		let tempWelcomeChannel: Discord.GuildChannel = this.guild.channels.find((c: Discord.GuildChannel) => c.name === config.welcomeChannel);
+		if(!tempWelcomeChannel)
+		{
+			throw Error('Could not find channel ' + config.welcomeChannel);
+		}
+		if(tempWelcomeChannel.type !== 'text')
+		{
+			throw Error('Welcome channel is not a text channel!');
+		}
+		this.welcomeChannel = <Discord.TextChannel>tempWelcomeChannel;
+		
+		
+	}
+	
+	/**
 	 * @brief Initializes all bot client listeners.
 	 */
 	private initListeners()
 	{
+		//! Error handlers
 		this.client.on('disconnect', () => {
 			console.error('Disconnected, attempting to reconnect...');
 			this.login();
 		});
-		
 		this.client.on('error', (error: Error) => {
 			console.error(`Error occured, error: ${error.message}`);
 			console.error('Attempting to reconnect...');
 			this.login();
+		});
+		
+		//! User join / leave messages
+		this.client.on('guildMemberAdd', (member: Discord.GuildMember) => {
+			this.welcomeChannel.send(Message.MemberJoin(member));
+		});
+		this.client.on('guildMemberRemove', (member: Discord.GuildMember) => {
+			this.welcomeChannel.send(Message.MemberLeave(member));
 		});
 	}
 	
@@ -54,6 +99,9 @@ export class Bot
 		this.client.login(this.token).catch(console.error)
 		.then(() => {
 			console.log(`Logged in as ${this.client.user.username}!`);
+		
+			// Init client vars.
+			this.initConfig();
 		});
 	}
 };
