@@ -11,7 +11,12 @@ export default async function setcolor(args: cmdArgs)
 		return;
 	}
 	
-	let hex: string = args.args[0];
+	let color: number = parseInt(args.args[0], 16);
+	if(isNaN(color))
+	{
+		args.message.channel.send(Message.Error(`Invalid hex color specified.`));
+		return;
+	}
 	let name: string = '';
 	if(args.args.length == 2)
 	{
@@ -29,7 +34,7 @@ export default async function setcolor(args: cmdArgs)
 	});
 	
 	// Generate the color role name.
-	let colorRoleName = `Color.${name} ${hex}`;
+	let colorRoleName = `Color.${name} ${color}`;
 	let guild: Discord.Guild = args.message.guild;
 	
 	// Check if the role exists already
@@ -37,12 +42,15 @@ export default async function setcolor(args: cmdArgs)
 	if(role)
 	{
 		member.addRole(role, 'Color role!')
-		.catch(() => console.error(`Couldn't give user ${member.displayName} role.`));
+		.catch(() => console.error(`Couldn't give user ${member.displayName} role.`))
+		.then(() => {
+			args.message.channel.send(Message.Success('Successfully replaced color role!'));
+		});
 	}
 	else
 	{
 		guild.createRole({
-			color: parseInt(hex, 16),
+			color: color,
 			hoist: false,
 			mentionable: false,
 			name: colorRoleName,
@@ -50,7 +58,10 @@ export default async function setcolor(args: cmdArgs)
 		}, 'Color role creation!')
 		.catch(() => console.error('Couldn\'nt create role' + colorRoleName + '.\n'))
 		.then((r: Discord.Role) => {
-			member.addRole(r).catch(() => console.error(`Couldn't give user ${member.displayName} a role.`));
+			member.addRole(r).catch(() => console.error(`Couldn't give user ${member.displayName} a role.`))
+			.then(() => {
+				args.message.channel.send(Message.Success('Successfully replaced color role!'));
+			});
 		})
 	}
 	
