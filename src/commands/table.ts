@@ -1,5 +1,6 @@
 import setcolor from './setcolor';
 import help from './help';
+import setpronouns from './setpronouns';
 import { cmdArgs } from './cmdArgs';
 
 /**
@@ -7,7 +8,8 @@ import { cmdArgs } from './cmdArgs';
  */
 let table: any = {
 	setcolor: setcolor,
-	help: help
+	help: help,
+	setpronouns: setpronouns
 };
 
 export { table };

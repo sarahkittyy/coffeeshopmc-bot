@@ -49,12 +49,21 @@ export default async function setcolor(args: cmdArgs)
 	}
 	else
 	{
+		// Position the color role above all pronoun roles.
+		let position: number = guild.roles.size;
+		guild.roles.forEach((r: Discord.Role) => {
+			if(r.name.startsWith('Pronouns:') && r.position < position)
+			{
+				position = r.position;
+			}
+		});
+		
 		guild.createRole({
 			color: color,
 			hoist: false,
 			mentionable: false,
 			name: colorRoleName,
-			position: guild.roles.size
+			position: position
 		}, 'Color role creation!')
 		.catch(() => console.error('Couldn\'nt create role' + colorRoleName + '.\n'))
 		.then((r: Discord.Role) => {
