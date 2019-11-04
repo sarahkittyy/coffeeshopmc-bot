@@ -70,8 +70,9 @@ export default async function setcolor(args: cmdArgs)
 			member.addRole(r).catch(() => console.error(`Couldn't give user ${member.displayName} a role.`))
 			.then(() => {
 				args.message.channel.send(Message.Success('Successfully replaced color role!'));
+				r.setPosition(position);
 			});
-		})
+		});
 	}
 	
 }
