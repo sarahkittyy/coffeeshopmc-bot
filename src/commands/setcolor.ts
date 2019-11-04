@@ -50,9 +50,9 @@ export default async function setcolor(args: cmdArgs)
 	else
 	{
 		// Position the color role above all pronoun roles.
-		let position: number = guild.roles.size;
+		let position: number = 0;
 		guild.roles.forEach((r: Discord.Role) => {
-			if(r.name.startsWith('Pronouns:') && r.position < position)
+			if(r.name.startsWith('Pronouns:') && r.position > position)
 			{
 				position = r.position;
 			}
@@ -70,7 +70,6 @@ export default async function setcolor(args: cmdArgs)
 			member.addRole(r).catch(() => console.error(`Couldn't give user ${member.displayName} a role.`))
 			.then(() => {
 				args.message.channel.send(Message.Success('Successfully replaced color role!'));
-				r.setPosition(position);
 			});
 		});
 	}
